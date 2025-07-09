@@ -1,39 +1,372 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Identity Verification Demo</title>
+    <title>4i Digital - Demo de Identidad de Extremo a Extremo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-        video { border: 2px solid #ddd; border-radius: 8px; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .loader {
+            border-top-color: #4f46e5;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Stepper styles */
+        .step-item {
+            cursor: pointer;
+        }
+        .step-circle {
+            transition: all 0.3s ease;
+        }
+        .step-line {
+            transition: all 0.3s ease;
+        }
+        .step-label {
+             transition: all 0.3s ease;
+        }
+        .service-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
 
-    <h1>Welcome to the Identity Verification Demo</h1>
-    <p>Please watch the following video to see the onboarding process.</p>
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Flujo de Identidad y Credenciales</h1>
+            <p class="text-gray-600 mt-2">Una demostración paso a paso de un proceso moderno de verificación de identidad.</p>
+        </header>
 
-    <video id="onboardingVideo" width="640" height="360" controls>
-        <!-- Make sure this path is correct for your video file in the repo -->
-        <source src="onboarding.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+        <!-- Stepper Navigation -->
+        <div class="mb-12 px-4">
+            <div id="stepper" class="flex items-center">
+                <!-- Step 1 -->
+                <div class="step-item flex-1 flex flex-col items-center text-center" data-tab="1">
+                    <div class="flex items-center w-full">
+                        <div class="step-circle z-10 flex items-center justify-center w-10 h-10 bg-indigo-600 rounded-full text-lg font-semibold text-white">1</div>
+                        <div class="step-line flex-auto border-t-2 border-gray-200"></div>
+                    </div>
+                    <p class="step-label text-sm font-medium mt-2 text-indigo-600">Incorporación</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="step-item flex-1 flex flex-col items-center text-center" data-tab="2">
+                    <div class="flex items-center w-full">
+                        <div class="step-circle z-10 flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full text-lg font-semibold text-gray-500">2</div>
+                        <div class="step-line flex-auto border-t-2 border-gray-200"></div>
+                    </div>
+                    <p class="step-label text-sm font-medium mt-2 text-gray-500">Verificación</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="step-item flex-1 flex flex-col items-center text-center" data-tab="3">
+                    <div class="flex items-center w-full">
+                        <div class="step-circle z-10 flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full text-lg font-semibold text-gray-500">3</div>
+                        <div class="step-line flex-auto border-t-2 border-gray-200"></div>
+                    </div>
+                    <p class="step-label text-sm font-medium mt-2 text-gray-500">Credencial</p>
+                </div>
+                <!-- Step 4 -->
+                <div class="step-item flex-1 flex flex-col items-center text-center" data-tab="4">
+                    <div class="flex items-center w-full">
+                        <div class="step-circle z-10 flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full text-lg font-semibold text-gray-500">4</div>
+                        <div class="step-line flex-auto border-t-2 border-gray-200"></div>
+                    </div>
+                    <p class="step-label text-sm font-medium mt-2 text-gray-500">Ecosistema</p>
+                </div>
+                <!-- Step 5 -->
+                <div class="step-item flex-1 flex flex-col items-center text-center" data-tab="5">
+                    <div class="flex items-center w-full">
+                        <div class="step-circle z-10 flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full text-lg font-semibold text-gray-500">5</div>
+                        <div class="step-line flex-auto border-t-2 border-gray-200"></div>
+                    </div>
+                    <p class="step-label text-sm font-medium mt-2 text-gray-500">Aplicación</p>
+                </div>
+                <!-- Step 6 -->
+                <div class="step-item flex-shrink-0 flex flex-col items-center text-center" data-tab="6">
+                    <div class="flex items-center">
+                        <div class="step-circle z-10 flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full text-lg font-semibold text-gray-500">6</div>
+                    </div>
+                    <p class="step-label text-sm font-medium mt-2 text-gray-500">Completado</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Tab Content -->
+        <main>
+            <!-- Tab 1: Onboarding Video -->
+            <div id="tab-1" class="tab-content active bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold mb-4 text-center">Incorporación del Usuario</h2>
+                <p class="text-center text-gray-600 mb-6">El usuario utliza su dispositivo movil para validar su identidad con las verficaciones de 4iDigital.</p>
+                <div class="flex justify-center">
+                    <video id="onboardingVideo" class="rounded-lg shadow-md" width="360" height="640" controls>
+                        <source src="onboarding.mp4" type="video/mp4">
+                        Su navegador no soporta la etiqueta de video.
+                    </video>
+                </div>
+                 <p class="text-center text-xs text-gray-500 mt-4">(El demo procederá automáticamente cuando termine el video)</p>
+            </div>
+
+            <!-- Tab 2: Verification Results -->
+            <div id="tab-2" class="tab-content bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold mb-2 text-center">Verificación de Identidad Completada</h2>
+                <p class="text-center text-gray-600 mb-6">El usuario ha completado la verificación. El sistema ahora tiene los siguientes datos.</p>
+                <div class="bg-gray-900 text-white p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                    <pre><code id="jsonData"></code></pre>
+                </div>
+                <div class="text-center mt-8">
+                    <button id="issueCredentialBtn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center mx-auto">
+                        <svg id="issue-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="m10 13-2 2 2 2"></path><path d="m14 13 2 2-2 2"></path></svg>
+                        <span id="issue-text">Emitir Credencial Verificable</span>
+                        <div id="issue-loader" class="loader w-5 h-5 rounded-full border-2 border-gray-200 hidden"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab 3: Credential Issued -->
+            <div id="tab-3" class="tab-content bg-white p-6 rounded-lg shadow-sm text-center">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 mx-auto mb-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <h2 class="text-2xl font-semibold mb-2">¡Credencial Emitida Exitosamente!</h2>
+                <p class="text-gray-600 mb-6">Los datos de identidad del usuario han sido sellados criptográficamente en una Credencial Verificable.</p>
+                 <div class="text-left bg-gray-900 text-white p-4 rounded-lg font-mono text-sm overflow-x-auto mb-8">
+                    <pre><code id="credentialData"></code></pre>
+                </div>
+                <button id="addToWalletBtn" class="bg-black text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+                    Añadir a la Billetera y Ver Ecosistema
+                </button>
+            </div>
+
+            <!-- Tab 4: Ecosystem -->
+            <div id="tab-4" class="tab-content bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold mb-2 text-center">Ecosistema de Socios</h2>
+                <p class="text-center text-gray-600 mb-8">Tu nueva credencial puede ser usada para acceder instantáneamente a servicios de socios de confianza.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    <!-- Service Card: Banco Ueno -->
+                    <div class="service-card border border-gray-200 rounded-lg p-4 text-center bg-white">
+                        <div class="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                             <svg class="w-8 h-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">Banco Ueno</h3>
+                        <p class="text-xs text-gray-500 mt-1 mb-4">Potenciando tu viaje financiero con soluciones personalizadas.</p>
+                        <button class="w-full text-sm bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300">Visitar</button>
+                    </div>
+                    <!-- Service Card: 4i Digital -->
+                     <div class="service-card border border-gray-200 rounded-lg p-4 text-center bg-white">
+                        <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">4i Digital para KYC</h3>
+                        <p class="text-xs text-gray-500 mt-1 mb-4">Agilizando la verificación segura de identidad para mejorar la confianza.</p>
+                        <button class="w-full text-sm bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300">Visitar</button>
+                    </div>
+                    <!-- Service Card: Central de Riesgo -->
+                     <div class="service-card border border-gray-200 rounded-lg p-4 text-center bg-white">
+                        <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-green-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">Central de Riesgo</h3>
+                        <p class="text-xs text-gray-500 mt-1 mb-4">Informes de crédito y análisis de puntaje completos para individuos.</p>
+                        <button class="w-full text-sm bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300">Visitar</button>
+                    </div>
+                    <!-- Service Card: Mercado Libre -->
+                     <div class="service-card border-2 border-yellow-400 rounded-lg p-4 text-center bg-yellow-50">
+                        <div class="w-16 h-16 mx-auto bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                           <svg class="w-8 h-8 text-yellow-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">Mercado Libre</h3>
+                        <p class="text-xs text-gray-500 mt-1 mb-4">Simplificando tus compras con millones de productos y soluciones.</p>
+                        <button id="mercadoLibreBtn" class="w-full text-sm bg-yellow-400 text-yellow-900 font-semibold py-2 rounded-md hover:bg-yellow-500">Aplicar Ahora</button>
+                    </div>
+                     <!-- Service Card: Telco -->
+                     <div class="service-card border border-gray-200 rounded-lg p-4 text-center bg-white">
+                        <div class="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-orange-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"></path><path d="M2.47 12.52a10.02 10.02 0 0 1 19.06 0"></path><path d="M5.22 7.22a4.99 4.99 0 0 1 13.56 0"></path></svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">Telco</h3>
+                        <p class="text-xs text-gray-500 mt-1 mb-4">Conectando tu mundo con la red más rápida y confiable del país.</p>
+                        <button class="w-full text-sm bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300">Visitar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Apply for Product -->
+            <div id="tab-5" class="tab-content bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/3 text-center">
+                        <img src="https://http2.mlstatic.com/storage/official-stores-images/mercadolibre/2019_ML_ISO_POS_HI_RGB.png" alt="Mercado Libre" class="mx-auto w-48">
+                        <h3 class="text-xl font-semibold mt-4">Solicitar una Tarjeta de Crédito</h3>
+                        <p class="text-gray-500 text-sm mt-1">Mercado Libre</p>
+                    </div>
+                    <div class="md:w-2/3">
+                        <h2 class="text-2xl font-semibold mb-4">¡Bienvenido de nuevo!</h2>
+                        <p class="text-gray-600 mb-6">Para solicitar de forma segura tu nueva tarjeta de crédito, por favor presenta tu credencial de identidad digital. Esto reemplaza la necesidad de llenar largos formularios y subir documentos.</p>
+                        <button id="applyBtn" class="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                            Solicitar con mi Credencial de Identidad
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 6: Complete -->
+            <div id="tab-6" class="tab-content bg-white p-6 rounded-lg shadow-sm text-center">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 mx-auto mb-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <h2 class="text-2xl font-semibold mb-2">¡Solicitud Enviada!</h2>
+                <p class="text-gray-600 mb-6">Tu solicitud ha sido enviada de forma segura a Mercado Libre usando tu Credencial Verificable.</p>
+                <button id="restartBtn" class="bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors">
+                    Reiniciar Demo
+                </button>
+            </div>
+        </main>
+    </div>
 
     <script>
-        // Get the video element
-        const video = document.getElementById('onboardingVideo');
+        // --- DATA (HARD-CODED FOR DEMO) ---
+        const identityData = {
+            "decision": "HIT",
+            "idtx": "b6dea34c-7186-4082-8e96-0ab6941c8280",
+            "document": {
+                "apellidos": "ALMAGUER CARDONA",
+                "nombres": "JESUS ANGEL",
+                "fechanac": "12/09/1996",
+                "sexo": "M",
+                "nacionalidad": "MEXICAN",
+                "numeroIdPersonal": "AACJ960912HNLLRS05"
+            },
+            "fingerprint": {
+                "visitorId": "aBCdEfgHiJKLmnoPqRSTuvwXyZ123456",
+                "confidence": { "score": 0.99 },
+                "ip": "192.168.1.100",
+                "geolocation": "Mexico City, MX"
+            }
+        };
 
-        // Define the URL to redirect to
-        const resultsUrl = 'https://demomexico4iserviciosv2.azurewebsites.net/ResultValidation?decision=HIT&idtx=b6dea34c-7186-4082-8e96-0ab6941c8280&externalID=f12a333f-1c97-43b9-8c1c-bd5c39cf937aMEX08072025183151354';
+        const verifiableCredential = {
+            "@context": [
+                "https://www.w3.org/2018/credentials/v1",
+                "https://www.w3.org/2018/credentials/examples/v1"
+            ],
+            "id": "http://example.gov/credentials/3732",
+            "type": ["VerifiableCredential", "IdentityVerificationCredential"],
+            "issuer": "did:web:truvera.io",
+            "issuanceDate": new Date().toISOString(),
+            "credentialSubject": {
+                "id": "did:key:z6Mkj...",
+                "lastName": "ALMAGUER CARDONA",
+                "firstName": "JESUS ANGEL",
+                "dateOfBirth": "12/09/1996",
+                "nationality": "MEXICAN",
+                "fingerprintVisitorId": "aBCdEfgHiJKLmnoPqRSTuvwXyZ123456"
+            },
+            "proof": {
+                "type": "Ed25519Signature2018",
+                "created": new Date().toISOString(),
+                "verificationMethod": "did:web:truvera.io#key-1",
+                "proofPurpose": "assertionMethod",
+                "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d-T5gYhV..."
+            }
+        };
 
-        // Add an event listener for when the video ends
-        video.addEventListener('ended', function() {
-            console.log('Video finished, redirecting...');
-            // Redirect the browser to the results page
-            window.location.href = resultsUrl;
+        // --- APPLICATION LOGIC ---
+        const stepperItems = document.querySelectorAll('.step-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        function switchTab(tabNumber) {
+            // Update stepper visual state
+            stepperItems.forEach((step, index) => {
+                const circle = step.querySelector('.step-circle');
+                const label = step.querySelector('.step-label');
+                const line = step.querySelector('.step-line');
+                
+                const stepIndex = index + 1;
+                const isActive = stepIndex == tabNumber;
+                const isCompleted = stepIndex < tabNumber;
+
+                circle.classList.toggle('bg-indigo-600', isActive || isCompleted);
+                circle.classList.toggle('text-white', isActive || isCompleted);
+                circle.classList.toggle('bg-gray-200', !isActive && !isCompleted);
+                circle.classList.toggle('text-gray-500', !isActive && !isCompleted);
+
+                label.classList.toggle('text-indigo-600', isActive);
+                label.classList.toggle('text-gray-900', isCompleted && !isActive);
+                label.classList.toggle('text-gray-500', !isActive && !isCompleted);
+
+                if (line) {
+                    line.classList.toggle('border-indigo-600', isCompleted);
+                    line.classList.toggle('border-gray-200', !isCompleted);
+                }
+            });
+
+            // Show the correct tab content
+            tabContents.forEach(content => {
+                content.classList.toggle('active', content.id === `tab-${tabNumber}`);
+            });
+        }
+
+        stepperItems.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const currentTab = Array.from(tabContents).findIndex(tc => tc.classList.contains('active')) + 1;
+                const targetTab = parseInt(tab.dataset.tab);
+                // Allow navigation only to completed or current steps
+                if (targetTab <= currentTab) {
+                    switchTab(targetTab);
+                }
+            });
         });
-    </script>
 
+        // Populate JSON data displays
+        document.getElementById('jsonData').textContent = JSON.stringify(identityData, null, 2);
+        document.getElementById('credentialData').textContent = JSON.stringify(verifiableCredential, null, 2);
+
+        // Video player logic
+        const video = document.getElementById('onboardingVideo');
+        video.addEventListener('ended', () => {
+            switchTab(2);
+        });
+
+        // Button logic
+        const issueCredentialBtn = document.getElementById('issueCredentialBtn');
+        issueCredentialBtn.addEventListener('click', () => {
+            document.getElementById('issue-text').classList.add('hidden');
+            document.getElementById('issue-icon').classList.add('hidden');
+            document.getElementById('issue-loader').classList.remove('hidden');
+            issueCredentialBtn.disabled = true;
+
+            setTimeout(() => {
+                switchTab(3);
+                document.getElementById('issue-text').classList.remove('hidden');
+                document.getElementById('issue-icon').classList.remove('hidden');
+                document.getElementById('issue-loader').classList.add('hidden');
+                issueCredentialBtn.disabled = false;
+            }, 2000); // Simulate 2-second API call
+        });
+
+        document.getElementById('addToWalletBtn').addEventListener('click', () => switchTab(4));
+        document.getElementById('mercadoLibreBtn').addEventListener('click', () => switchTab(5));
+        document.getElementById('applyBtn').addEventListener('click', () => switchTab(6));
+        
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            switchTab(1);
+            // Reset video to the beginning
+            video.currentTime = 0;
+        });
+
+    </script>
 </body>
 </html>

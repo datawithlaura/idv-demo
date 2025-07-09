@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Verification Demo</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        video { border: 2px solid #ddd; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to the Identity Verification Demo</h1>
+    <p>Please watch the following video to see the onboarding process.</p>
+
+    <video id="onboardingVideo" width="640" height="360" controls>
+        <!-- Make sure this path is correct for your video file in the repo -->
+        <source src="YOUR_VIDEO_FILE.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        // Get the video element
+        const video = document.getElementById('onboardingVideo');
+
+        // Define the URL to redirect to
+        const resultsUrl = 'https://demomexico4iserviciosv2.azurewebsites.net/ResultValidation?decision=HIT&idtx=b6dea34c-7186-4082-8e96-0ab6941c8280&externalID=f12a333f-1c97-43b9-8c1c-bd5c39cf937aMEX08072025183151354';
+
+        // Add an event listener for when the video ends
+        video.addEventListener('ended', function() {
+            console.log('Video finished, redirecting...');
+            // Redirect the browser to the results page
+            window.location.href = resultsUrl;
+        });
+    </script>
+
+</body>
+</html>

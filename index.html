@@ -126,6 +126,9 @@
             <div id="tab-2" class="tab-content bg-white p-6 rounded-lg shadow-sm">
                 <h2 class="text-2xl font-semibold mb-2 text-center">Verificación de Identidad Completada</h2>
                 <p class="text-center text-gray-600 mb-6">El usuario ha completado la verificación. El sistema ahora tiene los siguientes datos.</p>
+                <div class="w-full h-[600px] border border-gray-300 rounded-lg overflow-hidden">
+                    <iframe src="https://demomexico4iserviciosv2.azurewebsites.net/ResultValidation?decision=HIT&idtx=fed0cca1-23be-46b9-b242-b777a2ae0f26&externalID=f12a333f-1c97-43b9-8c1c-bd5c39cf937aMEX09072025164212691" class="w-full h-full" title="Verification Results"></iframe>
+                </div>
                 <div class="bg-gray-900 text-white p-4 rounded-lg font-mono text-sm overflow-x-auto">
                     <pre><code id="jsonData"></code></pre>
                 </div>
@@ -137,7 +140,7 @@
                     </button>
                 </div>
             </div>
-
+            
             <!-- Tab 3: Credential Issued -->
             <div id="tab-3" class="tab-content bg-white p-6 rounded-lg shadow-sm text-center">
                  <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 mx-auto mb-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
@@ -242,18 +245,18 @@
             "decision": "HIT",
             "idtx": "b6dea34c-7186-4082-8e96-0ab6941c8280",
             "document": {
-                "apellidos": "ALMAGUER CARDONA",
-                "nombres": "JESUS ANGEL",
-                "fechanac": "12/09/1996",
+                "apellidos": "GUTIERREZ SANCHEZ",
+                "nombres": "LAURA FRANZELLA",
+                "fechanac": "12/09/1993",
                 "sexo": "M",
-                "nacionalidad": "MEXICAN",
+                "nacionalidad": "NICARAGUAN",
                 "numeroIdPersonal": "AACJ960912HNLLRS05"
             },
             "fingerprint": {
                 "visitorId": "aBCdEfgHiJKLmnoPqRSTuvwXyZ123456",
                 "confidence": { "score": 0.99 },
                 "ip": "192.168.1.100",
-                "geolocation": "Mexico City, MX"
+                "geolocation": "Lima, Peru"
             }
         };
 
@@ -268,10 +271,10 @@
             "issuanceDate": new Date().toISOString(),
             "credentialSubject": {
                 "id": "did:key:z6Mkj...",
-                "lastName": "ALMAGUER CARDONA",
-                "firstName": "JESUS ANGEL",
-                "dateOfBirth": "12/09/1996",
-                "nationality": "MEXICAN",
+                "lastName": "GUTIERREZ sANCHEZ",
+                "firstName": "LAURA FRANZELLA",
+                "dateOfBirth": "12/09/1993",
+                "nationality": "NICARAGUAN",
                 "fingerprintVisitorId": "aBCdEfgHiJKLmnoPqRSTuvwXyZ123456"
             },
             "proof": {
